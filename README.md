@@ -2,27 +2,34 @@
 
 ## AAI-501 Final Team Project — University of San Diego
 
-This project develops an AI-assisted EV charging management system that combines:
+This project is a part of the **AAI-501** course in the **Master of Science in Applied Artificial Intelligence Program** at the **University of San Diego (USD)**.
 
-- Time-series analysis
-- Regression-based machine learning
-- K-Means clustering
-- Dynamic pricing simulation
-- Mathematical optimization
-- Empirical, held-out verification
+**Project Status:** Completed
 
-The objective is to determine whether historical EV charging behavior can be used to predict future
-demand, and whether those predictions can be turned into better charging and pricing decisions. This
-README is written as a tour guide: read it top to bottom and you should be able to reproduce the
-exact process and land on the same numbers reported here and in the project report.
+---
 
-------------------------------------------------------------------------
+## Contributors
 
-## 1. Project Objective
+* **Meaha J**
+* **Sanjay Kumar**
+* **Navneet Kumar**
 
-EV charging stations can experience highly uneven demand throughout the day. During peak periods,
-many vehicles may attempt to charge simultaneously, increasing electricity costs and creating
-charger congestion. During off-peak periods, available charging capacity may remain unused.
+**Course:** AAI-501 — Applied Artificial Intelligence
+**University:** University of San Diego
+
+---
+
+## Project Introduction
+
+This project develops an AI-assisted EV charging management system that combines time-series analysis, regression-based machine learning, K-Means clustering, dynamic pricing simulation, mathematical optimization, and empirical verification.
+
+The objective is to determine whether historical EV charging behavior can be used to predict future charging demand and whether those predictions can be translated into improved charging schedules and pricing decisions. The project focuses on connecting machine-learning predictions with optimization-based decisions rather than evaluating prediction accuracy alone.
+
+---
+
+## Project Objective
+
+EV charging stations can experience highly uneven demand throughout the day. During peak periods, many vehicles may attempt to charge simultaneously, increasing electricity costs and creating charger congestion. During off-peak periods, available charging capacity may remain unused.
 
 This project builds a smart charging pipeline that:
 
@@ -33,31 +40,31 @@ This project builds a smart charging pipeline that:
 5. Optimizes charging schedules for flexible EV sessions.
 6. Compares the optimized strategy against a simple immediate-charging baseline.
 
-The central idea:
+### Project Workflow
 
-``` text
+```text
 Historical Charging Data
           |
           v
-    Data Cleaning
+     Data Cleaning
           |
           v
- Feature Engineering
+   Feature Engineering
           |
      +----+----+
      |         |
      v         v
 Time-Series   User
- Forecasting  Clustering
+Forecasting  Clustering
      |         |
      +----+----+
           |
           v
     Demand / User
-     Behavior
+      Behavior
           |
           v
-   Dynamic Pricing
+    Dynamic Pricing
           |
           v
  Mathematical Optimization
@@ -70,368 +77,657 @@ Baseline vs Optimized
      Verification
 ```
 
-------------------------------------------------------------------------
+---
 
-## 2. Quick Facts (Final Results)
+## Methods Used
 
-| | |
-|---|---|
-| Raw sessions | 72,856 |
+* Data Cleaning and Preprocessing
+* Exploratory Data Analysis (EDA)
+* Feature Engineering
+* Time-Series Analysis
+* Regression-Based Machine Learning
+* Linear Regression
+* Decision Tree Regression
+* Random Forest Regression
+* Gradient Boosting
+* K-Means Clustering
+* Dynamic Pricing Simulation
+* Mathematical Optimization
+* Mixed-Integer Linear Programming (MILP)
+* Data Visualization
+* Model Evaluation
+* Empirical Hold-Out Verification
+
+---
+
+## Technologies
+
+* Python 3.10+
+* Jupyter Notebook
+* Pandas
+* NumPy
+* Scikit-learn
+* SciPy
+* Matplotlib
+* Seaborn
+* Git
+* GitHub
+
+---
+
+## Quick Facts
+
+| Metric                             |                  Result |
+| ---------------------------------- | ----------------------: |
+| Raw charging sessions              |                  72,856 |
 | Cleaned sessions used for analysis | 72,296 (99.2% retained) |
-| Unique users / chargers / locations | 2,335 / 2,116 / 14 |
-| Best demand forecaster | Random Forest — RMSE 78.96 kWh, MAE 57.81 kWh, R² 0.673 |
-| Naive 24-hour baseline (for comparison) | RMSE 104.26 kWh, R² 0.430 |
-| Peak-hour classification agreement | 85.58% |
-| Best user segmentation | K-Means, K=2, silhouette 0.440 (after excluding `UserID = 0`) |
-| Optimized vs. immediate charging | +3.2% estimated profit (+56.12 currency units), same 723.26 kWh delivered |
+| Unique users                       |                   2,335 |
+| Unique chargers                    |                   2,116 |
+| Locations                          |                      14 |
+| Best demand forecaster             |           Random Forest |
+| Random Forest RMSE                 |               78.96 kWh |
+| Random Forest MAE                  |               57.81 kWh |
+| Random Forest R²                   |                   0.673 |
+| Naive 24-hour baseline RMSE        |              104.26 kWh |
+| Peak-hour classification agreement |                  85.58% |
+| Best user segmentation             |            K-Means, K=2 |
+| K-Means silhouette score           |                   0.440 |
+| Optimized vs. immediate charging   |  +3.2% estimated profit |
+| Estimated profit improvement       |   +56.12 currency units |
+| Total energy delivered             |              723.26 kWh |
 
-Full detail on every number above is in [Section 6, Results](#6-results) and in
-`ev_project_output/project_summary.csv`.
+---
 
-------------------------------------------------------------------------
+## Project Description
 
-## 3. Repository Layout and Setup
+The project uses historical EV charging transaction data to develop an integrated demand prediction, user segmentation, dynamic pricing, and charging optimization pipeline.
 
-```
-EV_Charging_Patterns_and_Revenue_Optimisation.ipynb   The full analysis — the actual deliverable, run top to bottom
-ChargingRecords.csv                                    Raw dataset (see Section 4)
-requirements.txt                                       Python packages needed to run the notebook
-ev_project_output/                                      Everything the notebook produces when it runs (see Section 7)
-AAI501_Smart_EV_Charging_Final_Project_Report.docx      Written report (gitignored — not tracked in this repo)
-```
+The machine-learning component focuses on forecasting hourly charging demand using historical temporal patterns, lag variables, rolling averages, and calendar features. User behavior is analyzed through K-Means clustering to identify meaningful charging patterns.
 
-There is no standalone `.py` script in this repo — the notebook *is* the project code, organized
-into the numbered sections described below, and it is what should be run to reproduce every figure,
-table, and metric cited in the report.
+The project then extends the analysis into decision-making by simulating dynamic electricity and customer pricing and using mixed-integer linear programming to determine optimized charging schedules. The optimized strategy is compared with an immediate-charging baseline to evaluate whether predictions and optimization can improve estimated profitability.
 
-### Installation
+---
 
-Python 3.10+ is recommended.
-
-``` bash
-git clone https://github.com/codemiitkumar/AAI-501-Group-3-EV-Charging-And-Revenue-Optimization.git
-cd AAI-501-Group-3-EV-Charging-And-Revenue-Optimization
-pip install -r requirements.txt
-```
-
-### Running the project
-
-`ChargingRecords.csv` is already included at the repo root, and the notebook looks for it there
-automatically (Section 1 of the notebook), so no manual data setup is required. Either:
-
-- Open `EV_Charging_Patterns_and_Revenue_Optimisation.ipynb` in Jupyter, JupyterLab, or VS Code and
-  run all cells top to bottom, **or**
-- Run it non-interactively from the command line:
-
-  ``` bash
-  jupyter nbconvert --to notebook --execute --inplace EV_Charging_Patterns_and_Revenue_Optimisation.ipynb
-  ```
-
-A full run takes a few minutes — training Random Forest / Gradient Boosting and solving the MILP are
-the slowest steps. `RANDOM_STATE = 42` is fixed everywhere a model or sampling step needs one, so a
-full re-run should reproduce the same numbers reported here (small differences in the 3rd decimal
-place can happen across different `scikit-learn`/`numpy` versions). When the run finishes,
-`ev_project_output/` will contain the charts and CSVs referenced throughout this README and the
-report.
-
-------------------------------------------------------------------------
-
-## 4. Dataset
+## Dataset
 
 The project uses a public, real-world EV charging transaction dataset:
 
-> Baek, K., Lee, E., & Kim, J. (2024). A dataset for multi-faceted analysis of electric vehicle
-> charging transactions. *Scientific Data, 11*, 262. https://doi.org/10.1038/s41597-024-02942-9
+**Baek, K., Lee, E., & Kim, J. (2024).** A dataset for multi-faceted analysis of electric vehicle charging transactions. *Scientific Data, 11*, 262. DOI: 10.1038/s41597-024-02942-9
 
-The file expected (and included) at the repo root is `ChargingRecords.csv`, containing 72,856
-charging sessions with:
+The dataset is provided in the repository as:
 
-| Column | Description |
-|---|---|
-| `UserID` | Customer identifier. `0` is a special value meaning "not a subscribed customer" — see Section 8. |
-| `ChargerID` | Which charger the session used. |
-| `ChargerCompany`, `ChargerType` | Categorical charger attributes. |
-| `Location` | One of 14 site categories (apartment, hotel, company, etc.). |
-| `StartDay`/`StartTime`/`EndDay`/`EndTime`/`StartDatetime`/`EndDatetime` | Session start/end. |
-| `Duration` | Recorded session length in minutes (recalculated from timestamps during cleaning). |
-| `Demand` | Energy delivered during the session, in kWh. |
-
-### Important limitation
-
-The original dataset does **not** directly contain:
-
-- Electricity prices
-- Customer charging prices
-- Battery state of charge
-- Explicit customer departure deadlines or charging flexibility
-- Actual station profit
-
-These variables are therefore introduced as **transparent simulation assumptions**, each documented
-at the point in the notebook where it's introduced — see Section 8 (Assumptions) below.
-
-------------------------------------------------------------------------
-
-## 5. How the Notebook Is Organized
-
-Each numbered section below is a real section in the notebook — this is the map for reproducing the
-same process and the same patterns.
-
-| # | Section | What it does |
-|---|---|---|
-| 1 | Import Data File | Loads `ChargingRecords.csv` and does a first look at row/column counts. |
-| 2 | Data Cleaning | Parses timestamps, coerces numeric columns, drops 13 exact duplicates and 547 sessions with inconsistent start/end times, and recalculates `Duration` from the timestamps (the source of truth) rather than trusting the raw field. |
-| 3 | Feature Engineering | Derives calendar features (hour, day of week, weekend flag, etc.) and average charging power (kW) per session. |
-| 4 | Data Visualization | Five charts covering sessions/demand by hour, the demand distribution, and demand by location and weekday. |
-| 5 | Building the Hourly Time Series | Resamples sessions into one row per hour and adds lag features (1, 2, 3, 24, 168 hours back) plus a 24-hour rolling mean, then does a **chronological** 80/20 train/test split — the model never sees the future during training. |
-| 6 | Regression Model Comparison | Trains Linear Regression, Decision Tree, Random Forest, and Gradient Boosting on the hourly time series and compares MAE/RMSE/R² on the held-out test period. |
-| 7 | Forecast Verification | Benchmarks the best model against a naive "same hour as 24 hours ago" baseline, to check the models are learning something beyond a simple heuristic. |
-| 8 | K-Means User Behavior Clustering | Groups **subscribed** users (`UserID = 0` is the dataset's catch-all for non-subscribed customers and is excluded) by session count, demand, duration, and timing, then picks the number of clusters by silhouette score. |
-| 9 | Dynamic Pricing Simulation | Defines transparent, clearly-labeled pricing assumptions (a time-of-use electricity cost and a utilization-based customer price) and computes hourly charger utilization from overlapping sessions. |
-| 10 | Charging Schedule Optimization | Formulates a mixed-integer linear program (MILP, via `scipy.optimize.milp`) that decides *when* — within each driver's historical availability window — to charge a sample of sessions, maximizing profit under a grid power-limit constraint. |
-| 11 | Baseline vs. Optimized Verification | Compares the MILP schedule against an "immediate charging" baseline on cost, profit, peak load, and utilization. |
-| 12 | Prediction → Decision Verification | Checks whether the demand forecast is useful for real decisions, not just accurate on paper, by seeing how often it flags the same "peak" hours as what actually happened. |
-| 13 | Project Summary | Prints and saves the one-row summary of headline numbers (`project_summary.csv`). |
-
-------------------------------------------------------------------------
-
-## 6. Results
-
-### Regression model comparison (Section 6–7)
-
-| Model | MAE (kWh) | RMSE (kWh) | R² |
-|---|---|---|---|
-| **Random Forest** | **57.81** | **78.96** | **0.673** |
-| Gradient Boosting | 57.38 | 79.44 | 0.669 |
-| Linear Regression | 61.65 | 83.70 | 0.633 |
-| Decision Tree | 65.05 | 89.85 | 0.577 |
-| Naive 24-hour baseline | 75.24 | 104.26 | 0.430 |
-
-Random Forest and Gradient Boosting are effectively tied for best performance and both are
-comfortably ahead of the naive baseline (about a 24% RMSE reduction) — evidence that the lag/rolling
-features and calendar variables capture real temporal structure. The forecast also correctly labels
-a held-out hour as a "peak" (top 25% by demand) or not 85.58% of the time, which is the more
-operationally relevant number for staffing/scheduling decisions.
-
-### K-Means user clustering (Section 8)
-
-`UserID = 0` represents every non-subscribed customer lumped together (43% of all sessions), not one
-person — left in, it forms its own artificial mega-cluster. Excluded, K-Means on the remaining 2,334
-users finds a clean two-group split at K=2 (silhouette 0.440):
-
-| Cluster | Users | Avg. sessions | Avg. total demand | Avg. duration | Avg. start hour | Weekend share |
-|---|---|---|---|---|---|---|
-| Casual users | 2,125 | 8.53 | 142.51 kWh | 134.6 min | 15.01 | 30% |
-| Frequent users | 209 | 109.41 | 2,117.00 kWh | 175.1 min | 14.42 | 24% |
-
-The smaller "frequent user" group drives roughly 13× the sessions and 15× the total energy of the
-"casual user" group, and skews toward slightly earlier, more weekday-driven charging.
-
-### Dynamic pricing and optimization (Sections 9–11)
-
-| Metric | Immediate-charging baseline | Optimized schedule |
-|---|---|---|
-| Total energy delivered | 723.26 kWh | 723.26 kWh |
-| Estimated electricity cost | 5,459.51 currency units | 5,403.40 currency units |
-| Estimated revenue | 7,232.62 currency units | 7,232.62 currency units |
-| Estimated profit | 1,773.10 currency units | 1,829.22 currency units |
-| Peak charging load | 22.00 kW | 22.00 kW |
-| Average charger utilization | 4.68% | 4.68% |
-
-Both strategies deliver identical total energy (each session's required charging hours are a hard
-constraint regardless of policy), so this isolates the value of *when* to charge. Shifting sessions
-into cheaper electricity-cost hours cuts cost by ~1.0% and improves estimated profit by 3.2%, with
-revenue unchanged — the entire gain comes from timing, not price or volume. Peak load and
-utilization are identical between strategies at this 30-session sample size, showing the assumed 150
-kW grid limit was never close to binding; at a larger simultaneous session count the optimizer would
-likely also reduce peak load.
-
-------------------------------------------------------------------------
-
-## 7. Generated Outputs
-
-Running the notebook creates:
-
-```
-ev_project_output/
-│
-├── cleaned_charging_records.csv
-├── regression_model_comparison.csv
-├── forecast_verification.csv
-├── user_cluster_profiles.csv
-├── user_clusters.csv
-├── dynamic_pricing_simulation.csv
-├── optimized_charging_schedule.csv
-├── baseline_vs_optimized.csv
-├── prediction_decision_verification.csv
-├── project_summary.csv
-│
-├── 01_sessions_by_hour.png
-├── 02_demand_by_hour.png
-├── 03_demand_distribution.png
-├── 04_location_demand.png
-├── 05_weekday_demand.png
-├── 06_actual_vs_predicted.png
-├── 07_cluster_selection.png
-├── 08_baseline_vs_optimized.png
-└── 09_model_rmse_comparison.png
+```text
+ChargingRecords.csv
 ```
 
-Every figure and table cited in the written report is generated directly by the notebook and saved
-here, so the report and the code should never drift out of sync — if you re-run the notebook, these
-files (and the numbers in Section 6 above) should reproduce.
+It contains **72,856 charging sessions**.
 
-------------------------------------------------------------------------
+### Dataset Overview
 
-## 8. Assumptions and Limitations
+| Attribute             |      Value |
+| --------------------- | ---------: |
+| Raw charging sessions |     72,856 |
+| Cleaned sessions      |     72,296 |
+| Data retained         |      99.2% |
+| Unique users          |      2,335 |
+| Unique chargers       |      2,116 |
+| Locations             |         14 |
+| Main demand variable  |   `Demand` |
+| Duration variable     | `Duration` |
 
-The following assumptions should be — and are — explicitly discussed in the final report. Each is
-introduced at the point in the notebook where it becomes necessary:
+### Data Dictionary
 
-### Electricity price and customer price (Section 9)
+| Column           | Description                                                                    |
+| ---------------- | ------------------------------------------------------------------------------ |
+| `UserID`         | Customer identifier. `0` represents non-subscribed customers grouped together. |
+| `ChargerID`      | Identifier of the charger used for the session.                                |
+| `ChargerCompany` | Charger company/category.                                                      |
+| `ChargerType`    | Type of charger.                                                               |
+| `Location`       | Charging site category such as apartment, hotel, company, etc.                 |
+| `StartDay`       | Session start day.                                                             |
+| `StartTime`      | Session start time.                                                            |
+| `EndDay`         | Session end day.                                                               |
+| `EndTime`        | Session end time.                                                              |
+| `StartDatetime`  | Combined session start timestamp.                                              |
+| `EndDatetime`    | Combined session end timestamp.                                                |
+| `Duration`       | Charging session duration in minutes.                                          |
+| `Demand`         | Energy delivered during the charging session in kWh.                           |
 
-The dataset does not contain historical electricity prices or actual customer payments. The project
-uses a simulated time-of-use electricity cost schedule and a utilization-based customer price tier:
+### Dataset Limitations
 
-``` text
-Electricity cost                       Customer price
-00:00–06:00   5 currency units/kWh     Utilization < 30%    8 currency units/kWh
-06:00–16:00   7 currency units/kWh     30–60%               10 currency units/kWh
-16:00–21:00  11 currency units/kWh     60–80%               13 currency units/kWh
-21:00–00:00   7 currency units/kWh     >80%                 16 currency units/kWh
+The original dataset does not directly contain:
+
+* Electricity prices
+* Customer charging prices
+* Battery state of charge
+* Explicit customer departure deadlines
+* Explicit charging flexibility preferences
+* Actual station profit
+
+Therefore, these variables are introduced as transparent simulation assumptions and are documented in the assumptions section.
+
+---
+
+## Research Questions and Hypotheses
+
+### RQ1 / H1 — Demand Prediction
+
+**Research Question:** Can historical EV charging data predict future hourly demand better than a naive baseline?
+
+**Hypothesis:** Machine-learning models using historical temporal patterns will outperform a simple 24-hour historical baseline.
+
+**Result:** Supported. Random Forest achieved an RMSE of 78.96 kWh compared with 104.26 kWh for the naive baseline, representing approximately a 24% reduction in RMSE.
+
+### RQ2 — Model Comparison
+
+**Research Question:** Which regression algorithm performs best for hourly EV demand forecasting?
+
+**Result:** Random Forest produced the best overall R² and RMSE performance, narrowly ahead of Gradient Boosting.
+
+### RQ3 / H2 — User Behavior Segmentation
+
+**Research Question:** Can EV users be separated into meaningful behavioral groups?
+
+**Hypothesis:** EV users will exhibit distinct charging patterns that can be identified through clustering.
+
+**Result:** Supported. K-Means produced a two-group segmentation after excluding `UserID = 0`, which represents aggregated non-subscribed customers.
+
+### RQ4 / H3 — Dynamic Pricing
+
+**Research Question:** Can predicted utilization be used to develop a dynamic pricing strategy?
+
+**Hypothesis:** Utilization-based pricing can provide a framework for adjusting customer prices according to station demand.
+
+**Result:** Partially supported. A transparent utilization-based pricing simulation was successfully implemented. However, the dataset does not contain real customer price or elasticity information, so the actual behavioral impact of dynamic pricing cannot be measured.
+
+### RQ5 / H4 — Charging Optimization
+
+**Research Question:** Can optimization improve charging schedules compared with immediate charging?
+
+**Hypothesis:** Scheduling charging during lower-cost periods can reduce estimated electricity costs and increase estimated profit.
+
+**Result:** Supported. The optimized schedule improved estimated profit by 3.2%, or approximately 56.12 currency units, while delivering the same total energy.
+
+### RQ6 / H5 — Prediction-to-Decision Verification
+
+**Research Question:** Do better demand predictions produce measurably better operational decisions?
+
+**Hypothesis:** Accurate demand predictions should improve identification of peak charging periods that can support scheduling and pricing decisions.
+
+**Result:** Supported. The demand forecast correctly classified peak versus non-peak hours 85.58% of the time.
+
+---
+
+## Methodology
+
+### 1. Data Import
+
+The `ChargingRecords.csv` file is loaded and examined for its number of rows, columns, data types, and initial data quality.
+
+### 2. Data Cleaning
+
+The data-cleaning process:
+
+* Parses timestamp fields.
+* Converts numeric columns to appropriate formats.
+* Removes 13 exact duplicate records.
+* Removes 547 sessions with inconsistent start/end times.
+* Recalculates `Duration` from timestamps.
+* Produces 72,296 cleaned sessions.
+
+### 3. Feature Engineering
+
+Additional variables are derived from the original data, including:
+
+* Hour of day
+* Day of week
+* Weekend indicator
+* Average charging power
+* Historical demand lags
+* Rolling demand statistics
+
+### 4. Exploratory Data Analysis and Visualization
+
+The project examines charging behavior using visualizations of:
+
+* Sessions by hour
+* Demand by hour
+* Demand distribution
+* Demand by location
+* Demand by weekday
+* Actual versus predicted demand
+* Cluster selection
+* Baseline versus optimized charging
+* Model RMSE comparison
+
+### 5. Time-Series Demand Forecasting
+
+Charging sessions are aggregated into an hourly time series.
+
+Lag features include:
+
+* 1-hour lag
+* 2-hour lag
+* 3-hour lag
+* 24-hour lag
+* 168-hour lag
+
+A 24-hour rolling mean is also included.
+
+A chronological 80/20 train-test split is used so that future observations are not used during training.
+
+### 6. Regression Model Comparison
+
+The following models are trained and evaluated:
+
+* Linear Regression
+* Decision Tree
+* Random Forest
+* Gradient Boosting
+
+Evaluation metrics include:
+
+* Mean Absolute Error (MAE)
+* Root Mean Squared Error (RMSE)
+* R²
+
+### 7. Forecast Verification
+
+The best forecasting model is compared against a naive 24-hour baseline to determine whether the machine-learning approach provides meaningful improvement over a simple historical heuristic.
+
+### 8. K-Means User Behavior Clustering
+
+Subscribed users are grouped according to:
+
+* Session frequency
+* Total demand
+* Session duration
+* Charging timing
+* Weekend charging behavior
+
+`UserID = 0` is excluded from clustering because it represents an aggregate group of non-subscribed customers rather than an individual customer.
+
+The number of clusters is evaluated using silhouette score.
+
+### 9. Dynamic Pricing Simulation
+
+Because the original dataset does not contain historical electricity prices or customer payment information, transparent pricing assumptions are introduced.
+
+#### Electricity Cost
+
+| Time        |      Electricity Cost |
+| ----------- | --------------------: |
+| 00:00–06:00 |  5 currency units/kWh |
+| 06:00–16:00 |  7 currency units/kWh |
+| 16:00–21:00 | 11 currency units/kWh |
+| 21:00–00:00 |  7 currency units/kWh |
+
+#### Customer Price
+
+| Utilization |        Customer Price |
+| ----------- | --------------------: |
+| < 30%       |  8 currency units/kWh |
+| 30–60%      | 10 currency units/kWh |
+| 60–80%      | 13 currency units/kWh |
+| > 80%       | 16 currency units/kWh |
+
+These are simulation assumptions rather than observed historical prices.
+
+### 10. Charging Schedule Optimization
+
+A Mixed-Integer Linear Programming (MILP) model is developed using `scipy.optimize.milp`.
+
+The optimization determines when charging should occur within a simulated availability window while considering:
+
+* Required energy
+* Charging duration
+* Charging power
+* Electricity cost
+* Grid capacity
+
+The objective is to maximize estimated profit.
+
+### 11. Baseline vs. Optimized Verification
+
+The optimized charging schedule is compared with an immediate-charging baseline using:
+
+* Total energy delivered
+* Estimated electricity cost
+* Estimated revenue
+* Estimated profit
+* Peak charging load
+* Average charger utilization
+
+### 12. Prediction-to-Decision Verification
+
+The project evaluates whether the demand forecast can correctly identify peak versus non-peak periods. This connects forecasting performance with the operational decisions that depend on predicted demand.
+
+---
+
+## Results
+
+### Regression Model Comparison
+
+| Model                  | MAE (kWh) | RMSE (kWh) |        R² |
+| ---------------------- | --------: | ---------: | --------: |
+| **Random Forest**      | **57.81** |  **78.96** | **0.673** |
+| Gradient Boosting      |     57.38 |      79.44 |     0.669 |
+| Linear Regression      |     61.65 |      83.70 |     0.633 |
+| Decision Tree          |     65.05 |      89.85 |     0.577 |
+| Naive 24-hour baseline |     75.24 |     104.26 |     0.430 |
+
+Random Forest and Gradient Boosting performed similarly, with Random Forest achieving the best RMSE and R². Both models substantially outperformed the naive 24-hour baseline.
+
+The forecast correctly classified held-out hours as peak or non-peak periods **85.58%** of the time.
+
+### K-Means User Clustering
+
+After excluding `UserID = 0`, K-Means identified two main user groups with a silhouette score of **0.440**.
+
+| Cluster        | Users | Avg. Sessions | Avg. Total Demand | Avg. Duration | Avg. Start Hour | Weekend Share |
+| -------------- | ----: | ------------: | ----------------: | ------------: | --------------: | ------------: |
+| Casual users   | 2,125 |          8.53 |        142.51 kWh |     134.6 min |           15.01 |           30% |
+| Frequent users |   209 |        109.41 |      2,117.00 kWh |     175.1 min |           14.42 |           24% |
+
+The smaller frequent-user group generated substantially more charging sessions and energy demand than the casual-user group.
+
+### Dynamic Pricing and Optimization
+
+| Metric                      | Immediate-Charging Baseline | Optimized Schedule |
+| --------------------------- | --------------------------: | -----------------: |
+| Total energy delivered      |                  723.26 kWh |         723.26 kWh |
+| Estimated electricity cost  |                    5,459.51 |           5,403.40 |
+| Estimated revenue           |                    7,232.62 |           7,232.62 |
+| Estimated profit            |                    1,773.10 |       **1,829.22** |
+| Peak charging load          |                    22.00 kW |           22.00 kW |
+| Average charger utilization |                       4.68% |              4.68% |
+
+The optimized schedule reduced estimated electricity costs by approximately 1.0% and increased estimated profit by **3.2%** while delivering the same total amount of energy.
+
+The profit improvement comes from shifting charging to lower-cost periods rather than increasing revenue or charging volume.
+
+---
+
+## Challenges, Assumptions, and Limitations
+
+### Electricity Price and Customer Price
+
+The dataset does not contain historical electricity prices or actual customer payments. Therefore, the project uses simulated time-of-use electricity costs and utilization-based customer pricing.
+
+### Charging Flexibility
+
+The dataset does not explicitly indicate whether a customer is willing to delay charging. Historical session start and end times are therefore used as a proxy for the customer's availability window.
+
+### Battery Information
+
+Battery capacity and state of charge are not available. Historical energy demand is used as the required energy for the simulated charging session.
+
+### Charging Power
+
+Charging power is estimated as:
+
+```text
+Demand / (Duration / 60)
 ```
 
-These are simulation assumptions, not observations from the dataset.
+and capped at a 22 kW charger limit.
 
-### Charging flexibility and availability windows (Section 10)
+Where this cap would make the original session window infeasible, the window is extended as an approximation.
 
-The dataset does not state whether a customer is willing to delay charging. The optimization
-therefore reuses each historical session's real start/end interval as a stand-in for a customer's
-availability window.
+### UserID = 0
 
-### Battery information (Section 10)
+`UserID = 0` represents all non-subscribed customers as one aggregated category rather than an individual user. Including it as a single user would create an artificial cluster, so it is excluded from user-level clustering.
 
-Battery capacity and state of charge are not available. Historical energy demand (`Demand`) is used
-directly as the required energy for the simulated charging session.
+### Grid Capacity
 
-### Charging power (Section 10)
-
-Charging power is estimated as `Demand / (Duration / 60)` and capped at a realistic 22 kW charger
-limit. Where that cap would make a session's original window too short to fit its required charging
-hours, the window is stretched rather than left infeasible — this is an approximation, not a direct
-measurement of any vehicle's physical maximum charging rate.
-
-### `UserID = 0` exclusion (Section 8)
-
-This ID represents every non-subscribed customer lumped together, not one person, so treating it as
-a single "user" would create one artificial cluster containing 43% of all sessions. It's excluded
-from clustering and analyzed only as part of system-wide demand in the earlier sections.
-
-### Grid capacity (Sections 10–11)
-
-A single aggregate 150 kW limit stands in for a real electrical network; there is no per-charger or
-per-station constraint.
+A single aggregate 150 kW grid capacity is used to represent the electrical network. The model does not include individual station or charger-level capacity constraints.
 
 ### Profit
 
-Profit is simulated as `estimated revenue − estimated electricity cost`. It does not include labor,
-infrastructure depreciation, maintenance, taxes, demand charges, or other operating expenses.
+Estimated profit is calculated as:
 
-Because of these assumptions, the profit and peak-load numbers in Sections 9–11 should be read as a
-demonstration of the decision-making pipeline (forecast → segment → price → schedule), not a
-real-world financial forecast.
-
-------------------------------------------------------------------------
-
-## 9. Research Questions and Hypotheses
-
-**RQ1 / H1 — Supported.** Can historical EV charging data predict future hourly demand better than a
-naive baseline? Random Forest cuts RMSE by ~24% versus a 24-hour naive baseline (78.96 vs. 104.26
-kWh).
-
-**RQ2 — Answered.** Which regression algorithm performs best? Random Forest, narrowly ahead of
-Gradient Boosting; both clearly ahead of Linear Regression and a single Decision Tree.
-
-**RQ3 / H2 — Supported.** Can EV users be separated into meaningful behavior groups? Yes, once the
-aggregate `UserID = 0` group is excluded: a clean two-segment split (casual vs. frequent users,
-silhouette 0.440) rather than a degenerate single-outlier cluster.
-
-**RQ4 / H3 — Partially supported.** Can predicted utilization drive a dynamic pricing strategy? A
-transparent utilization-based pricing simulation is implemented and functions correctly, but since
-the dataset has no real price/elasticity data, whether it would actually shift real customer behavior
-remains untested — this is the main item in Future Work.
-
-**RQ5 / H4 — Supported.** Can optimization improve charging schedules over immediate charging? Yes —
-+3.2% estimated profit for the same energy delivered, purely from timing.
-
-**RQ6 / H5 — Supported.** Do better predictions produce measurably better decisions? The demand
-forecast correctly classifies peak vs. non-peak hours 85.58% of the time, which is the signal the
-scheduling/pricing decisions actually depend on.
-
-------------------------------------------------------------------------
-
-## 10. Academic Scope
-
-This project is intentionally designed as an integrated introductory machine-learning and
-optimization project — it does not attempt to build a production EV charging management system. The
-main academic contribution is connecting:
-
-``` text
-Time-Series Analysis + Machine Learning + Behavioral Clustering
-    + Dynamic Pricing + Mathematical Optimization + Empirical Verification
+```text
+Estimated Profit = Estimated Revenue − Estimated Electricity Cost
 ```
 
-The ML models answer *"what is likely to happen?"* The optimization model answers *"given that
-prediction, what should we do?"* — the project's central question is whether machine-learning
-predictions can be converted into better charging and pricing decisions, not just accurate ones.
+It does not include:
 
-------------------------------------------------------------------------
+* Labor
+* Infrastructure depreciation
+* Maintenance
+* Taxes
+* Demand charges
+* Other operating expenses
 
-## 11. Responsible Use of AI-Assisted Development
+Therefore, the reported profit should be interpreted as a demonstration of the decision-making pipeline rather than a real-world financial forecast.
 
-AI-assisted tools were used during the development of this project (data pipeline construction,
-debugging, and documentation), consistent with the course's academic-integrity requirements — this
-should be disclosed per the course's disclosure policy. Every result in this README, the notebook,
-and the report was independently executed and verified against the notebook's own output cells rather
-than assumed correct; two real bugs found during that verification (a Series/DataFrame handling issue
-in the pricing section, and a power-cap edge case that made the optimizer infeasible) were fixed and
-are reflected in the current code.
+---
 
-------------------------------------------------------------------------
+## Repository Structure
 
-## 12. Future Improvements
+```text
+AAI-501-Group-3-EV-Charging-And-Revenue-Optimization/
+│
+├── EV_Charging_Patterns_and_Revenue_Optimisation.ipynb
+├── ChargingRecords.csv
+├── requirements.txt
+├── README.md
+├── LICENSE
+│
+└── ev_project_output/
+    ├── cleaned_charging_records.csv
+    ├── regression_model_comparison.csv
+    ├── forecast_verification.csv
+    ├── user_cluster_profiles.csv
+    ├── user_clusters.csv
+    ├── dynamic_pricing_simulation.csv
+    ├── optimized_charging_schedule.csv
+    ├── baseline_vs_optimized.csv
+    ├── prediction_decision_verification.csv
+    ├── project_summary.csv
+    │
+    ├── 01_sessions_by_hour.png
+    ├── 02_demand_by_hour.png
+    ├── 03_demand_distribution.png
+    ├── 04_location_demand.png
+    ├── 05_weekday_demand.png
+    ├── 06_actual_vs_predicted.png
+    ├── 07_cluster_selection.png
+    ├── 08_baseline_vs_optimized.png
+    └── 09_model_rmse_comparison.png
+```
 
-A production-level version could incorporate:
+The notebook is the primary project code and should be run from beginning to end to reproduce the analysis, figures, tables, and reported metrics.
 
-- Real-time or historical electricity prices
-- Real-time charger availability
-- Battery state of charge and vehicle battery capacity
-- Individual maximum charging rates per vehicle/charger
-- Customer price elasticity measured from real pricing and behavior
-- Explicit departure deadlines and flexibility preferences
-- Renewable/solar generation forecasts and stationary battery storage
-- Demand charges and a multi-station (rather than single aggregate) grid model
-- Reinforcement learning for adaptive pricing
-- Additional forecasting approaches (XGBoost, ARIMA, LSTM/Transformer-based models)
-- Rolling-origin (rather than single chronological) forecast validation
+---
 
-------------------------------------------------------------------------
+## Installation
 
-## 13. References
+### Requirements
 
-- Baek, K., Lee, E., & Kim, J. (2024). A dataset for multi-faceted analysis of electric vehicle
-  charging transactions. *Scientific Data, 11*, 262. https://doi.org/10.1038/s41597-024-02942-9
-- Breiman, L. (2001). Random forests. *Machine Learning, 45*(1), 5–32.
-  https://doi.org/10.1023/A:1010933404324
-- Friedman, J. H. (2001). Greedy function approximation: A gradient boosting machine. *Annals of
-  Statistics, 29*(5), 1189–1232. https://doi.org/10.1214/aos/1013203451
-- Hyndman, R. J., & Athanasopoulos, G. (2021). *Forecasting: Principles and practice* (3rd ed.).
-  OTexts. https://otexts.com/fpp3/
-- MacQueen, J. B. (1967). Some methods for classification and analysis of multivariate observations.
-  In *Proceedings of the Fifth Berkeley Symposium on Mathematical Statistics and Probability*
-  (Vol. 1, pp. 281–297). University of California Press.
-- Virtanen, P., Gommers, R., Oliphant, T. E., et al. (2020). SciPy 1.0: Fundamental algorithms for
-  scientific computing in Python. *Nature Methods, 17*, 261–272.
-  https://doi.org/10.1038/s41592-019-0686-2
+* Python 3.10 or later
+* Jupyter Notebook, JupyterLab, or VS Code
+* Packages listed in `requirements.txt`
 
-See the full project report (`AAI501_Smart_EV_Charging_Final_Project_Report.docx`) for the complete
-discussion, additional references, and the team's detailed contributions.
+### Setup
+
+Clone the repository from GitHub and navigate to the project directory.
+
+Then install the required packages:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Running the Project
+
+The `ChargingRecords.csv` dataset is included in the repository, so no additional manual dataset setup is required.
+
+### Option 1: Jupyter Notebook
+
+Open:
+
+```text
+EV_Charging_Patterns_and_Revenue_Optimisation.ipynb
+```
+
+in Jupyter Notebook, JupyterLab, or VS Code and run all cells from top to bottom.
+
+### Option 2: Command Line
+
+```bash
+jupyter nbconvert --to notebook --execute --inplace EV_Charging_Patterns_and_Revenue_Optimisation.ipynb
+```
+
+A complete run takes several minutes. Random Forest / Gradient Boosting training and the MILP optimization are among the more computationally intensive steps.
+
+A fixed `RANDOM_STATE = 42` is used wherever model or sampling randomness is required.
+
+Small numerical differences may occur across different versions of NumPy or Scikit-learn.
+
+---
+
+## Generated Outputs
+
+Running the notebook creates the following files in `ev_project_output/`:
+
+### CSV Outputs
+
+* `cleaned_charging_records.csv`
+* `regression_model_comparison.csv`
+* `forecast_verification.csv`
+* `user_cluster_profiles.csv`
+* `user_clusters.csv`
+* `dynamic_pricing_simulation.csv`
+* `optimized_charging_schedule.csv`
+* `baseline_vs_optimized.csv`
+* `prediction_decision_verification.csv`
+* `project_summary.csv`
+
+### Visualization Outputs
+
+* `01_sessions_by_hour.png`
+* `02_demand_by_hour.png`
+* `03_demand_distribution.png`
+* `04_location_demand.png`
+* `05_weekday_demand.png`
+* `06_actual_vs_predicted.png`
+* `07_cluster_selection.png`
+* `08_baseline_vs_optimized.png`
+* `09_model_rmse_comparison.png`
+
+---
+
+## Academic Scope
+
+This project is designed as an integrated academic machine-learning and optimization project. It does not attempt to build a production-ready EV charging management system.
+
+The main academic contribution is connecting:
+
+```text
+Time-Series Analysis
+        +
+Machine Learning
+        +
+Behavioral Clustering
+        +
+Dynamic Pricing
+        +
+Mathematical Optimization
+        +
+Empirical Verification
+```
+
+The machine-learning models answer:
+
+> **What is likely to happen?**
+
+The optimization model answers:
+
+> **Given that prediction, what should we do?**
+
+The central focus is therefore on determining whether machine-learning predictions can be translated into better charging and pricing decisions, rather than evaluating prediction accuracy alone.
+
+---
+
+## Responsible Use of AI-Assisted Development
+
+AI-assisted tools were used during the development of this project for activities including data-pipeline construction, debugging, and documentation, consistent with the course's academic-integrity and disclosure requirements.
+
+All reported results were independently executed and verified against the notebook's output cells rather than being accepted solely based on AI-generated suggestions.
+
+During verification, issues including a Series/DataFrame handling issue in the pricing section and a power-cap edge case that could make the optimization infeasible were identified and corrected in the project code.
+
+---
+
+## Future Improvements
+
+A production-level version of the project could incorporate:
+
+* Real-time or historical electricity prices
+* Real-time charger availability
+* Battery state of charge
+* Vehicle battery capacity
+* Individual maximum charging rates
+* Customer price elasticity measured from real pricing and behavior
+* Explicit departure deadlines
+* Customer flexibility preferences
+* Renewable/solar generation forecasts
+* Stationary battery storage
+* Demand charges
+* Multi-station grid modeling
+* Reinforcement learning for adaptive pricing
+* XGBoost, ARIMA, LSTM, or Transformer-based forecasting
+* Rolling-origin forecast validation
+
+---
+
+## Conclusion
+
+This project demonstrates an end-to-end approach for transforming historical EV charging data into operational charging and pricing decisions.
+
+The results show that machine-learning models can capture useful temporal patterns in EV charging demand, while K-Means clustering can identify distinct user behavior groups. The optimization experiment further demonstrates that shifting charging schedules according to simulated electricity costs can improve estimated profit while maintaining the same delivered energy.
+
+Although the pricing and profit results rely on simulation assumptions because the source dataset does not contain real pricing, battery, or customer-flexibility information, the project provides a reproducible framework connecting demand forecasting, user segmentation, dynamic pricing, and charging schedule optimization.
+
+---
+
+## References
+
+1. Baek, K., Lee, E., & Kim, J. (2024). A dataset for multi-faceted analysis of electric vehicle charging transactions. *Scientific Data, 11*, 262. DOI: 10.1038/s41597-024-02942-9
+
+2. Breiman, L. (2001). Random forests. *Machine Learning, 45*(1), 5–32. DOI: 10.1023/A:1010933404324
+
+3. Friedman, J. H. (2001). Greedy function approximation: A gradient boosting machine. *Annals of Statistics, 29*(5), 1189–1232. DOI: 10.1214/aos/1013203451
+
+4. Hyndman, R. J., & Athanasopoulos, G. (2021). *Forecasting: Principles and Practice* (3rd ed.). OTexts.
+
+5. MacQueen, J. B. (1967). Some methods for classification and analysis of multivariate observations. In *Proceedings of the Fifth Berkeley Symposium on Mathematical Statistics and Probability*, Vol. 1. University of California Press.
+
+6. Virtanen, P., Gommers, R., Oliphant, T. E., et al. (2020). SciPy 1.0: Fundamental algorithms for scientific computing in Python. *Nature Methods, 17*. DOI: 10.1038/s41592-019-0686-2
+
+---
+
+## License
+
+This project is licensed under the **MIT License**. See the `LICENSE` file for details.
+
+> Note: The MIT License applies to the project code and documentation created by the team. The third-party EV charging dataset remains subject to its original licensing and usage terms.
+
+---
+
+## Acknowledgments
+
+We would like to thank **Dr. Anuj Kumar Sirohi** for his guidance and support throughout the development of this project as part of the AAI-501 course in the Master of Science in Applied Artificial Intelligence Program at the University of San Diego.
+
+We also acknowledge the authors of the EV charging transaction dataset and the open-source Python libraries that supported the data analysis, machine learning, visualization, and optimization components of this project.
+
+---
+
+## Project Report
+
+The complete project report contains the detailed methodology, additional analysis, discussion, references, and team contributions.
+
+**Report:** `AAI501_Smart_EV_Charging_Final_Project_Report.docx`
