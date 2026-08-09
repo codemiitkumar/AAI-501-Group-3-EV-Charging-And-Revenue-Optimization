@@ -1,0 +1,12 @@
+,Value
+OriginalRows,72856
+CleanedRows,72296
+UniqueUsers,2335
+UniqueChargers,2116
+Locations,14
+BestRegressionModel,Random Forest
+BestRegressionRMSE,78.95583081859547
+BestRegressionMAE,57.81459433256183
+BestRegressionR2,0.6731400285225209
+BestClusterK,2
+BestClusterSilhouette,0.440190605381712
